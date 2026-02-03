@@ -1,6 +1,22 @@
+<!DOCTYPE html>
 <html>
-    <head></head>
-    <body>
-        <p>Hey</p>
-    </body>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="icon" href="data:;base64,=">
+    <script type="module" src="app.js"></script>
+    <script>
+        function goto(location) {
+            history.pushState({}, "", location);
+            window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }))
+        }
+    </script>
+</head>
+
+<body>
+    <button onmousedown="goto('/')">Index</button>
+    <button onmousedown="goto('/character')">Character Sheet</button>
+    <app-router></app-router>
+</body>
+
 </html>
