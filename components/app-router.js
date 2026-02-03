@@ -2,8 +2,8 @@ class AppRouter extends HTMLElement {
     constructor() {
         super();
         this.routes = {
-            '/pathfindersheetthing/': 'character-list',
-            '/pathfindersheetthing/character': 'character-sheet'
+            '/': 'character-list',
+            '/character': 'character-sheet'
         }
     }
 
