@@ -2,8 +2,8 @@ class AppRouter extends HTMLElement {
     constructor() {
         super();
         this.routes = {
-            '/': 'character-list',
-            '/character': 'character-sheet'
+            '/pathfindersheetthing/': 'character-list',
+            '/pathfindersheetthing/character': 'character-sheet'
         }
     }
 
@@ -15,7 +15,6 @@ class AppRouter extends HTMLElement {
     handleRoute() {
         const path = window.location.pathname;
         const componentTag = this.routes[path] || 'character-list';
-        console.log(path)
 
         this.innerHTML = '';
         const component = document.createElement(componentTag);

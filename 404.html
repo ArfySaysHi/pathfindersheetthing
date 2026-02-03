@@ -7,7 +7,7 @@
     <script type="module" src="app.js"></script>
     <script>
         function goto(location) {
-            history.pushState({}, "", location);
+            history.pushState({}, "", `/pathfindersheetthing${location}`);
             window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }))
         }
     </script>
