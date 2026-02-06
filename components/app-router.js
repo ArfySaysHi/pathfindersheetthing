@@ -14,7 +14,6 @@ class AppRouter extends HTMLElement {
 
     handleRoute() {
         const path = window.location.pathname;
-        console.log(path);
         const componentTag = this.routes[path] || 'character-list';
 
         this.innerHTML = '';

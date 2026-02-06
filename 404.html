@@ -7,15 +7,15 @@
     <script type="module" src="app.js"></script>
     <script>
         function goto(location) {
-            history.pushState({}, "", `/pathfindersheetthing${location}`);
+            const newUrl = `/pathfindersheetthing${location}`;
+            if (newUrl === window.location.pathname) return;
+            history.pushState({}, "", newUrl);
             window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }))
         }
     </script>
 </head>
 
 <body>
-    <button onmousedown="goto('/')">Index</button>
-    <button onmousedown="goto('/character')">Character Sheet</button>
     <app-router></app-router>
 </body>
 

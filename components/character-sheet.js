@@ -1,3 +1,5 @@
+import { characterStore } from "/pathfindersheetthing/states/character-store.js";
+
 class CharacterSheet extends HTMLElement {
     #shadow;
 
@@ -7,9 +9,17 @@ class CharacterSheet extends HTMLElement {
         this.render();
     }
 
-    render() {
+    connectedCallback() {
+        this.onStore = e => this.render(e.detail);
+        characterStore.addEventListener('change', this.onStore);
+        this.render(characterStore.getState());
+    }
+
+    render(state) {
         this.#shadow.innerHTML = `
-            <div>SHEET GOES HERE</div>
+            <div>
+                ${JSON.stringify(state)}
+            </div>
         `;
     }
 }
