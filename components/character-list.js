@@ -10,7 +10,7 @@ class CharacterList extends HTMLElement {
     render() {
         this.#shadow.innerHTML = `
             <ul>
-                <li>Big Jeff</li>
+                <li onclick="goto('/character')">Big Jeff</li>
                 <li>Small Jeff</li>
                 <li>Medium Jeff</li>
             </ul>
