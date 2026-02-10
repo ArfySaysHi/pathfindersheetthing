@@ -15,7 +15,7 @@ export class CharacterStore extends EventTarget {
             description: '',
             languages: []
         },
-        combat: {
+        pointBuy: {
             str: 10,
             dex: 10,
             con: 10,
