@@ -1,5 +1,5 @@
 const defaultChar = {
-    id: 0,
+    id: '0',
     info: {
         name: 'Name',
         alignment: 'True Neutral',
@@ -40,14 +40,13 @@ class CharacterList extends HTMLElement {
     }
 
     createCharacter() {
-        localStorage.clear();
         const characters = JSON.parse(localStorage.getItem('characters'));
-        console.log(characters);
         if (!characters || (Array.isArray(characters) && characters.length === 0)) {
             localStorage.setItem('characters', JSON.stringify([defaultChar]));
             goto(`/character/${0}`)
         } else if (Array.isArray(characters) && characters.length > 0) {
-            localStorage.setItem('characters', JSON.stringify([...characters, { ...defaultChar, id: characters.length }]));
+            const newId = `${Number(characters[characters.length - 1].id) + 1}`
+            localStorage.setItem('characters', JSON.stringify([...characters, { ...defaultChar, id: newId }]));
             goto(`/character/${characters.length}`);
         }
     }
@@ -60,11 +59,23 @@ class CharacterList extends HTMLElement {
         this.#shadow.getElementById('new-character').removeEventListener('click', this.createCharacter.bind(this));
     }
 
+    renderCharacterIndex() {
+        const characters = JSON.parse(localStorage.getItem('characters'));
+
+        let output = '';
+        characters.forEach(c => {
+            output += `<li>${c.info.name}</li>`
+        });
+
+        return output;
+    }
+
     render() {
         this.#shadow.innerHTML = `
         <div>
             <button id='new-character'>New Character</button>
             <ul>
+                ${this.renderCharacterIndex()}
             </ul>
         </div>
         `;

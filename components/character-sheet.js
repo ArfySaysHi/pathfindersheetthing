@@ -9,7 +9,24 @@ class CharacterSheet extends HTMLElement {
         this.render();
     }
 
+    getCharacterById(id) {
+        const characters = JSON.parse(localStorage.getItem('characters'));
+
+        if (!characters) throw Error("No characters");
+        if (!Array.isArray(characters)) throw Error("Characters does not contain a valid array");
+        if (characters.length === 0) throw Error("Characters is empty.");
+
+        const c = characters.find(c => c.id === id);
+        if (c) return c;
+
+        throw Error("No character with that ID");
+    }
+
     connectedCallback() {
+        const char_id = window.location.pathname.split('/').pop();
+        const character = this.getCharacterById(char_id);
+        characterStore.set(character);
+
         this.onStore = e => this.render(e.detail);
         characterStore.addEventListener('change', this.onStore);
         this.render(characterStore.getState());
@@ -31,6 +48,7 @@ class CharacterSheet extends HTMLElement {
             <div>
                 <button id='testbtn'>Click Me</button>
                 <div class='character-sheet'>
+                    <div>${state.id}</div>
                     <div class='ability-scores'>
                         <table>
                             <tr>
