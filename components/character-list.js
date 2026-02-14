@@ -62,6 +62,8 @@ class CharacterList extends HTMLElement {
     renderCharacterIndex() {
         const characters = JSON.parse(localStorage.getItem('characters'));
 
+        if (!characters || !Array.isArray(characters)) return;
+
         let output = '';
         characters.forEach(c => {
             output += `<li>${c.info.name}</li>`
