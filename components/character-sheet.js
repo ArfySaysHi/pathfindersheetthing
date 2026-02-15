@@ -6,7 +6,6 @@ class CharacterSheet extends HTMLElement {
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
-        this.render();
     }
 
     getCharacterById(id) {
@@ -30,11 +29,12 @@ class CharacterSheet extends HTMLElement {
         this.onStore = e => this.render(e.detail);
         characterStore.addEventListener('change', this.onStore);
         this.render(characterStore.getState());
-        this.#shadow.getElementById('testbtn').addEventListener('click', this.test.bind(this));
+        this._testbtn = this.test.bind(this);
+        this.#shadow.getElementById('testbtn').addEventListener('click', this._testbtn);
     }
 
     disconnectedCallback() {
-        this.#shadow.getElementById('testbtn').removeEventListener('click', this.test.bind(this));
+        this.#shadow.getElementById('testbtn').removeEventListener('click', this._testbtn);
     }
 
     test() {
@@ -76,6 +76,7 @@ class CharacterSheet extends HTMLElement {
                                 <td>${state.pointBuy.cha}</td>
                             </tr>
                         </table>
+                        <mod-form></mod-form>
                     </div>
                 </div>
             </div>

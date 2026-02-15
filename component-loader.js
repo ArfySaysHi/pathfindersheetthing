@@ -1,7 +1,8 @@
 const components = [
     'app-router',
     'character-list',
-    'character-sheet'
+    'character-sheet',
+    'mod-form'
 ]
 
 async function loadComponents() {
