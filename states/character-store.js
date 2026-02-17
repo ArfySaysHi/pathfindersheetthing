@@ -31,7 +31,45 @@ const DEFAULT_STATE = {
         abilityMods: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
         AC: 10,
         hp: 0,
-        saves: { fort: 0, ref: 0, will: 0 }
+        saves: { fort: 0, ref: 0, will: 0 },
+        skills: {
+            Acrobatics: { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            Appraise: { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            Bluff: { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 },
+            Climb: { type: 'adventure', classSkill: false, abilityScore: 'str', skillMod: 0, rank: 0 },
+            Diplomacy: { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 },
+            'Disable Device': { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            Disguise: { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 },
+            'Escape Artist': { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            Fly: { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            'Handle Animal': { type: 'background', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 },
+            Heal: { type: 'adventure', classSkill: false, abilityScore: 'wis', skillMod: 0, rank: 0 },
+            Intimidate: { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 },
+            'Knowledge (Arcana)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Dungeoneering)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Engineering)': { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Geography)': { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (History)': { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Local)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Nature)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Nobility)': { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Planes)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            'Knowledge (Religion)': { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            Linguistics: { type: 'background', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            Perception: { type: 'adventure', classSkill: false, abilityScore: 'wis', skillMod: 0, rank: 0 },
+            Profession: { type: 'background', classSkill: false, abilityScore: 'wis', skillMod: 0, rank: 0 },
+            Ride: { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            'Sense Motive': { type: 'adventure', classSkill: false, abilityScore: 'wis', skillMod: 0, rank: 0 },
+            'Sleight of Hand': { type: 'background', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            Spellcraft: { type: 'adventure', classSkill: false, abilityScore: 'int', skillMod: 0, rank: 0 },
+            Stealth: { type: 'adventure', classSkill: false, abilityScore: 'dex', skillMod: 0, rank: 0 },
+            Survival: { type: 'adventure', classSkill: false, abilityScore: 'wis', skillMod: 0, rank: 0 },
+            Swim: { type: 'adventure', classSkill: false, abilityScore: 'str', skillMod: 0, rank: 0 },
+            'Use Magic Device': { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 }
+        },
+        options: {
+            backgroundSkills: false
+        }
     }
 };
 
@@ -62,20 +100,24 @@ export class CharacterStore extends EventTarget {
         return out;
     }
 
-    computeAbilityMods(pointBuy) {
+    computeAbilityMods(scores) {
         const keys = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
         const out = {};
         keys.forEach(k => {
-            const v = Number(pointBuy?.[k] ?? 10);
+            const v = Number(scores?.[k] ?? 10);
             out[k] = Math.floor((v - 10) / 2);
         });
         return out;
     }
 
+    computeSkills(state = {}) {
+        return state.derived.skills;
+    }
+
     // TODO: Make less placeholdery
     computeDerived(state) {
         const abilityScores = this.computeAbilityScores(state.pointBuy);
-        const abilityMods = this.computeAbilityMods(state.pointBuy);
+        const abilityMods = this.computeAbilityMods(abilityScores);
         const AC = 10 + (abilityMods.dex ?? 0);
         const hp = (state.level ?? 1) * (10 + (abilityMods.con ?? 0));
         const saves = {
@@ -83,7 +125,8 @@ export class CharacterStore extends EventTarget {
             ref: abilityMods.dex ?? 0,
             will: abilityMods.wis ?? 0
         };
-        return { abilityScores, abilityMods, AC, hp, saves };
+        const skills = this.computeSkills(state);
+        return { abilityScores, abilityMods, AC, hp, saves, skills };
     }
 
     save() {

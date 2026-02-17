@@ -27,60 +27,14 @@ class CharacterSheet extends HTMLElement {
     }
 
     handleTestBtn() {
-        characterStore.patchPointBuy({ str: 9 });
+        const val = this.#shadow.getElementById('valinput').value;
+        characterStore.patchPointBuy({ str: val });
         characterStore.save();
     }
 
     connectedCallback() {
-        this.#shadow.innerHTML = `
-      <style>
-        table { border-collapse: collapse; }
-        td { padding: 4px 8px; }
-      </style>
-      <div>
-        <input id="valinput" type="text" />
-        <button id="testbtn">Click Me</button>
-        <div class="character-sheet">
-          <div id="char-id"></div>
-          <div class="ability-scores">
-            <table>
-              <tr><td>STR</td><td id="str-score"></td><td id="str-mod"></td></tr>
-              <tr><td>DEX</td><td id="dex-score"></td><td id="dex-mod"></td></tr>
-              <tr><td>CON</td><td id="con-score"></td><td id="con-mod"></td></tr>
-              <tr><td>INT</td><td id="int-score"></td><td id="int-mod"></td></tr>
-              <tr><td>WIS</td><td id="wis-score"></td><td id="wis-mod"></td></tr>
-              <tr><td>CHA</td><td id="cha-score"></td><td id="cha-mod"></td></tr>
-            </table>
-            <mod-form id="mod-form"></mod-form>
-          </div>
-        </div>
-      </div>
-    `;
-
-        this._nodes = {
-            charId: this.#shadow.getElementById("char-id"),
-            score: {
-                str: this.#shadow.getElementById("str-score"),
-                dex: this.#shadow.getElementById("dex-score"),
-                con: this.#shadow.getElementById("con-score"),
-                int: this.#shadow.getElementById("int-score"),
-                wis: this.#shadow.getElementById("wis-score"),
-                cha: this.#shadow.getElementById("cha-score"),
-            },
-            mod: {
-                str: this.#shadow.getElementById("str-mod"),
-                dex: this.#shadow.getElementById("dex-mod"),
-                con: this.#shadow.getElementById("con-mod"),
-                int: this.#shadow.getElementById("int-mod"),
-                wis: this.#shadow.getElementById("wis-mod"),
-                cha: this.#shadow.getElementById("cha-mod"),
-            },
-            modForm: this.#shadow.getElementById("mod-form"),
-            testbtn: this.#shadow.getElementById("testbtn")
-        };
-
-        this.onStore = (e) => this.updateFromStore(e.detail);
-        characterStore.addEventListener("change", this.onStore);
+        this.initialRender();
+        this.assignNodes();
 
         this._nodes.testbtn.addEventListener('mousedown', this.handleTestBtn);
 
@@ -91,30 +45,40 @@ class CharacterSheet extends HTMLElement {
         } catch (err) {
             console.error(err);
         }
-
-        this.updateFromStore(characterStore.getState());
     }
 
     disconnectedCallback() {
-        if (this.onStore) {
-            characterStore.removeEventListener("change", this.onStore);
-        }
-
         if (this._nodes.testbtn) {
             this._nodes.testbtn.removeEventListener('mousedown', this.handleTestBtn);
         }
     }
 
-    updateFromStore(state = {}) {
-        if (!state) return;
-
-        ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach(key => {
-            this._nodes.score[key].textContent = characterStore.getState().derived.abilityScores[key];
-        })
+    initialRender() {
+        this.#shadow.innerHTML = `
+      <style>
+        table { border-collapse: collapse; }
+        td { padding: 4px 8px; }
+      </style>
+      <div>
+        <input id="valinput" type="number" />
+        <button id="testbtn">Click Me</button>
+        <div class="character-sheet">
+            <div id="char-id"></div>
+            <ability-scores></ability-scores>
+            <skill-table></skill-table>
+            <mod-form id="mod-form"></mod-form>
+          </div>
+        </div>
+      </div>
+    `;
     }
 
-    render(state) {
-        this.updateFromStore(state);
+    assignNodes() {
+        this._nodes = {
+            charId: this.#shadow.getElementById("char-id"),
+            modForm: this.#shadow.getElementById("mod-form"),
+            testbtn: this.#shadow.getElementById("testbtn")
+        };
     }
 }
 

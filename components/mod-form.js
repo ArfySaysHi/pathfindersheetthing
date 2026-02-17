@@ -26,7 +26,7 @@ class ModForm extends HTMLElement {
         if (this.$list) this.renderList();
     }
 
-    addMod(mod = { target: '', value: '' }) {
+    addMod(mod = { type: '', target: '', value: '' }) {
         this.#mods = [...this.#mods, mod];
         if (this.$list) this.renderList();
     }

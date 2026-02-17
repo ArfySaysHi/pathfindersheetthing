@@ -10,11 +10,8 @@ class CharacterList extends HTMLElement {
     createCharacter() {
         const characters = JSON.parse(localStorage.getItem('characters'));
         if (!characters || (Array.isArray(characters) && characters.length === 0)) {
-            localStorage.setItem('characters', JSON.stringify([defaultChar]));
             goto(`/character/${0}`)
         } else if (Array.isArray(characters) && characters.length > 0) {
-            // const newId = `${Number(characters[characters.length - 1].id) + 1}`
-            // localStorage.setItem('characters', JSON.stringify([...characters, { ...defaultChar, id: newId }]));
             goto(`/character/${characters.length}`);
         }
     }

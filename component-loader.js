@@ -1,8 +1,10 @@
 const components = [
+    'ability-scores',
     'app-router',
     'character-list',
     'character-sheet',
-    'mod-form'
+    'mod-form',
+    'skills'
 ]
 
 async function loadComponents() {
