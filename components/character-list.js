@@ -1,35 +1,3 @@
-const defaultChar = {
-    id: '0',
-    info: {
-        name: 'Name',
-        alignment: 'True Neutral',
-        race: 'Human',
-        deity: 'None',
-        age: 30,
-        gender: 'Any',
-        height: '5ft',
-        weight: '65kg',
-        eyes: 'brown',
-        hair: 'brown',
-        description: '',
-        languages: []
-    },
-    pointBuy: {
-        str: 10,
-        dex: 10,
-        con: 10,
-        int: 10,
-        wis: 10,
-        cha: 10,
-    },
-    inventory: [],
-    feats: [],
-    skills: [],
-    spells: [],
-    currentXp: 0,
-    classes: [],
-};
-
 class CharacterList extends HTMLElement {
     #shadow;
 
@@ -45,8 +13,8 @@ class CharacterList extends HTMLElement {
             localStorage.setItem('characters', JSON.stringify([defaultChar]));
             goto(`/character/${0}`)
         } else if (Array.isArray(characters) && characters.length > 0) {
-            const newId = `${Number(characters[characters.length - 1].id) + 1}`
-            localStorage.setItem('characters', JSON.stringify([...characters, { ...defaultChar, id: newId }]));
+            // const newId = `${Number(characters[characters.length - 1].id) + 1}`
+            // localStorage.setItem('characters', JSON.stringify([...characters, { ...defaultChar, id: newId }]));
             goto(`/character/${characters.length}`);
         }
     }
