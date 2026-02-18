@@ -8,12 +8,31 @@ class Skills extends HTMLElement {
         super();
         this.#shadow = this.attachShadow({ mode: 'open' });
         this.skills = [];
+
+        this._onChange = this._onChange.bind(this);
     }
 
     connectedCallback() {
         this.initialRender();
         this.assignNodes();
         this.renderSkills();
+
+        this.#shadow.addEventListener('change', this._onChange);
+    }
+
+    disconnectedCallback() {
+        this.#shadow.removeEventListener('change', this._onChange);
+    }
+
+    _onChange(e) {
+        console.log(e.target, e.target.dataset.skill);
+        if (!e.target.dataset?.skill) return;
+
+        const character = characterStore.getState();
+        let newState = structuredClone(character)
+        newState.derived.skills[e.target.dataset.skill].rank = e.target.value;
+        characterStore.set(newState);
+        characterStore.save();
     }
 
     renderSkills() {
@@ -24,7 +43,7 @@ class Skills extends HTMLElement {
                 <td><input type='checkbox' value='${skills[k].classSkill}' disabled='true' /></td>
                 <td>${skills[k].abilityScore}</td>
                 <td>${skills[k].skillMod}</td>
-                <td>${skills[k].rank}</td>
+                <td><input type='number' data-skill='${k}' min='0' value='${skills[k].rank}' /></td>
             </tr>`;
         }).join('')
     }
