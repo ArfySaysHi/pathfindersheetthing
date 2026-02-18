@@ -24,8 +24,8 @@ const DEFAULT_STATE = {
         wis: 10,
         cha: 10,
     },
+    items: [],
     feats: [],
-    modifiers: [],
     derived: {
         abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
         abilityMods: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },

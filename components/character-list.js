@@ -31,7 +31,7 @@ class CharacterList extends HTMLElement {
 
         let output = '';
         characters.forEach(c => {
-            output += `<li>${c.info.name}</li>`
+            output += `<li onclick='goto("/character/${c.id}");'>${c.info.name}</li>`
         });
 
         return output;

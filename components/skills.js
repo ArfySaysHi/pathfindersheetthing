@@ -18,7 +18,7 @@ class Skills extends HTMLElement {
 
     renderSkills() {
         const { derived: { skills } } = characterStore.getState();
-        this._nodes['skill-rows'].innerHTML = Object.keys(skills).map(k => {
+        this._nodes['skill-rows'].innerHTML = Object.keys(skills).sort().map(k => {
             return `<tr>
                 <td>${k}</td>
                 <td><input type='checkbox' value='${skills[k].classSkill}' disabled='true' /></td>
