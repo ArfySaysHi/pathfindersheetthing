@@ -8,7 +8,7 @@ class CharacterSheet extends HTMLElement {
     constructor() {
         super();
         this.#shadow = this.attachShadow({ mode: "open" });
-        this.handleTestBtn = this.handleTestBtn.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     getCharacterById(id) {
@@ -26,9 +26,7 @@ class CharacterSheet extends HTMLElement {
         localStorage.setItem('characters', JSON.stringify([...characters, characterStore.getState()]))
     }
 
-    handleTestBtn() {
-        const val = this.#shadow.getElementById('valinput').value;
-        characterStore.patchPointBuy({ str: val });
+    handleSave() {
         characterStore.save();
     }
 
@@ -36,7 +34,7 @@ class CharacterSheet extends HTMLElement {
         this.initialRender();
         this.assignNodes();
 
-        this._nodes.testbtn.addEventListener('mousedown', this.handleTestBtn);
+        this._nodes.savebtn.addEventListener('mousedown', this.handleSave);
 
         try {
             const char_id = window.location.pathname.split("/").pop();
@@ -48,25 +46,67 @@ class CharacterSheet extends HTMLElement {
     }
 
     disconnectedCallback() {
-        if (this._nodes.testbtn) {
-            this._nodes.testbtn.removeEventListener('mousedown', this.handleTestBtn);
+        if (this._nodes.savebtn) {
+            this._nodes.savebtn.removeEventListener('mousedown', this.handleSave);
         }
     }
 
     initialRender() {
         this.#shadow.innerHTML = `
-      <style>
-        table { border-collapse: collapse; }
-        td { padding: 4px 8px; }
-      </style>
+        <style>
+            .bento {
+                display: grid;
+                grid-template-columns: repeat(12, minmax(0, 1fr));
+                grid-template-rows: repeat(12, minmax(0, 1fr));
+                grid-auto-flow: dense;
+                gap: 1rem;
+            }
+
+            .bento-image {
+                grid-column: span 3;
+                grid-row: span 1;
+            }
+
+            .bento-portrait {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                min-width: 200px;
+            }
+
+            .bento-section-primary {
+                grid-column: span 6;
+                grid-row: span 4;
+            }
+
+            .bento-section-secondary {
+                grid-column: span 3;
+                grid-row: span 4;
+            }
+
+            .bento-section-tertiary {
+                grid-column: span 3;
+                grid-row: span 2;
+            }
+        </style>
       <div>
-        <input id="valinput" type="number" />
-        <button id="testbtn">Click Me</button>
+        <button id="savebtn">Save</button>
         <div class="character-sheet">
-            <div id="char-id"></div>
-            <ability-scores></ability-scores>
-            <skill-table></skill-table>
-            <mod-form id="mod-form"></mod-form>
+            <div class='bento'>
+                <section class='bento-image'>
+                    <img class='bento-portrait' src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvignette.wikia.nocookie.net%2Fp__%2Fimages%2Fb%2Fbd%2FMoe%252C....png%2Frevision%2Flatest%3Fcb%3D20190709142405%26path-prefix%3Dprotagonist&f=1&nofb=1&ipt=a60d834b569924c10c08f5465cb187513bc5e2d31c5c97c0e3df3b6eec09d391' />
+                </section>
+                <section class='bento-section-secondary'>
+                    <ability-scores></ability-scores>
+                    <character-saves></character-saves>
+                </section>
+                <section class='bento-section-primary'>
+                    <skill-table></skill-table>
+                </section>
+                <section class='bento-section-primary'>
+                    <mod-form id="mod-form"></mod-form>
+                </section>
+            </div>
           </div>
         </div>
       </div>
@@ -75,9 +115,8 @@ class CharacterSheet extends HTMLElement {
 
     assignNodes() {
         this._nodes = {
-            charId: this.#shadow.getElementById("char-id"),
             modForm: this.#shadow.getElementById("mod-form"),
-            testbtn: this.#shadow.getElementById("testbtn")
+            savebtn: this.#shadow.getElementById("savebtn")
         };
     }
 }
