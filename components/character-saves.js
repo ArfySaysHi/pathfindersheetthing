@@ -39,6 +39,30 @@ class CharacterSaves extends HTMLElement {
 
     initialRender() {
         this.#shadow.innerHTML = `
+            <style>
+                :host {
+                    display: block;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                table {
+                    width: 100%;
+                    table-layout: fixed;
+                    margin: 0;
+                    padding: 0;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                }
+                
+                table, th, td {
+                    border: 1px solid black;
+                }
+
+                th, td {
+                    text-align: center;
+                }
+            </style>
             <table id='character-saves'>
                 <thead>
                     <tr>

@@ -55,23 +55,22 @@ class CharacterSheet extends HTMLElement {
         this.#shadow.innerHTML = `
         <style>
             .bento {
-                display: grid;
+                display: grid; 
                 grid-template-columns: repeat(12, minmax(0, 1fr));
                 grid-template-rows: repeat(12, minmax(0, 1fr));
                 grid-auto-flow: dense;
-                gap: 1rem;
             }
 
             .bento-image {
                 grid-column: span 3;
-                grid-row: span 1;
+                grid-row: span 2;
+                min-width: 200px;
             }
 
             .bento-portrait {
+                display: block;
                 width: 100%;
-                height: 100%;
                 object-fit: cover;
-                min-width: 200px;
             }
 
             .bento-section-primary {
@@ -94,11 +93,11 @@ class CharacterSheet extends HTMLElement {
         <div class="character-sheet">
             <div class='bento'>
                 <section class='bento-image'>
-                    <img class='bento-portrait' src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvignette.wikia.nocookie.net%2Fp__%2Fimages%2Fb%2Fbd%2FMoe%252C....png%2Frevision%2Flatest%3Fcb%3D20190709142405%26path-prefix%3Dprotagonist&f=1&nofb=1&ipt=a60d834b569924c10c08f5465cb187513bc5e2d31c5c97c0e3df3b6eec09d391' />
+                    <img class='bento-portrait' src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fm%2Fb1FVT2wFB6IAAAAC%2Fhand-on-shoulder.gif&f=1&nofb=1&ipt=c7f2bb2b87598633a4beade8b18d357e5a765adbd153f09624883d18c6c4f97d' />
+                    <character-saves></character-saves>
                 </section>
                 <section class='bento-section-secondary'>
                     <ability-scores></ability-scores>
-                    <character-saves></character-saves>
                 </section>
                 <section class='bento-section-primary'>
                     <skill-table></skill-table>
