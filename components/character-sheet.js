@@ -102,10 +102,14 @@ class CharacterSheet extends HTMLElement {
                     <ability-scores></ability-scores>
                 </section>
                 <section class='bento-section-primary'>
-                    <skill-table></skill-table>
-                </section>
-                <section class='bento-section-primary'>
-                    <mod-form id="mod-form"></mod-form>
+                    <tab-container id="tabs">
+                        <tab-panel name="skills" title="Skills">
+                            <skill-table></skill-table>
+                        </tab-panel>
+                        <tab-panel name="items" title="Items">
+                            <mod-form id="mod-form"></mod-form>
+                        </tab-panel>
+                    </tab-container>
                 </section>
             </div>
           </div>

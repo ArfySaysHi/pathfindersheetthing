@@ -8,6 +8,8 @@ const components = [
     'character-sheet',
     'mod-form',
     'skills',
+    'tab-container',
+    'tab-panel'
 ]
 
 async function loadComponents() {
