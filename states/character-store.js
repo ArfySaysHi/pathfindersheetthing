@@ -25,6 +25,7 @@ const DEFAULT_STATE = {
         wis: 10,
         cha: 10,
     },
+    classes: [],
     items: [],
     feats: [],
     derived: {
@@ -68,9 +69,7 @@ const DEFAULT_STATE = {
             Swim: { type: 'adventure', classSkill: false, abilityScore: 'str', skillMod: 0, rank: 0 },
             'Use Magic Device': { type: 'adventure', classSkill: false, abilityScore: 'cha', skillMod: 0, rank: 0 }
         },
-        options: {
-            backgroundSkills: false
-        }
+        options: {}
     }
 };
 
@@ -83,6 +82,12 @@ export class CharacterStore extends EventTarget {
         this.#state = { ...this.#state, ...partial, version: (this.#state.version || 0) + 1 };
         this.#state.derived = this.computeDerived(this.#state);
         this.dispatchEvent(new CustomEvent('change', { detail: this.getState() }));
+    }
+
+    addClass(cls) {
+        if (!cls) return;
+        if (this.#state.classes.find(c => c.name.toLowerCase() === cls.name.toLowerCase())) return console.warn("You already have this class");
+        this.set({ classes: [...this.#state.classes, cls] });
     }
 
     patchPointBuy(patch = {}) {

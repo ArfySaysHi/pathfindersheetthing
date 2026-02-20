@@ -25,7 +25,6 @@ class Skills extends HTMLElement {
     }
 
     _onChange(e) {
-        console.log(e.target, e.target.dataset.skill);
         if (!e.target.dataset?.skill) return;
 
         const character = characterStore.getState();

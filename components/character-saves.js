@@ -51,14 +51,8 @@ class CharacterSaves extends HTMLElement {
                     table-layout: fixed;
                     margin: 0;
                     padding: 0;
-                    border-collapse: collapse;
-                    border-spacing: 0;
                 }
                 
-                table, th, td {
-                    border: 1px solid black;
-                }
-
                 th, td {
                     text-align: center;
                 }

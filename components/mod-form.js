@@ -38,7 +38,6 @@ class ModForm extends HTMLElement {
     addMod(mod = { type: 'Untyped', target: '', value: '' }) {
         this.#mods = [...this.#mods, { type: 'Untyped', target: '', value: '', ...mod }];
         this.renderList();
-        this._emitUpdate();
     }
 
     removeMod(idx) {
@@ -46,7 +45,6 @@ class ModForm extends HTMLElement {
         if (Number.isNaN(i) || i < 0 || i >= this.#mods.length) return;
         this.#mods = this.#mods.filter((_, j) => j !== i);
         this.renderList();
-        this._emitUpdate();
     }
 
     alterMod(idx, alteredVal) {
@@ -54,13 +52,11 @@ class ModForm extends HTMLElement {
         if (Number.isNaN(i) || i < 0 || i >= this.#mods.length) return;
         this.#mods = this.#mods.map((m, j) => j === i ? { ...m, ...alteredVal } : m);
         this._updateListItem(i);
-        this._emitUpdate();
     }
 
     handleSubmit(e) {
         e.preventDefault();
         const payload = { name: this.#name, type: this.#type, mods: this.#mods.slice() };
-        this.dispatchEvent(new CustomEvent('modform-submit', { detail: payload }));
         console.log('ModForm submit', payload);
     }
 
@@ -73,7 +69,6 @@ class ModForm extends HTMLElement {
         const action = el.dataset.action;
         if (action === 'typeselect' && el.tagName === 'SELECT') {
             this.type = el.value;
-            this.dispatchEvent(new CustomEvent('modform-typechange', { detail: { type: this.type } }));
         } else if (action === 'mod-type' && el.tagName === 'SELECT') {
             this.alterMod(el.dataset.index, { type: el.value });
         }
@@ -207,10 +202,6 @@ class ModForm extends HTMLElement {
         if (target && target.value !== m.target) target.value = m.target ?? '';
         if (val && val.value !== m.value) val.value = m.value ?? '';
         if (sel && sel.value !== m.type) sel.value = m.type ?? 'Untyped';
-    }
-
-    _emitUpdate() {
-        this.dispatchEvent(new CustomEvent('mods-updated', { detail: this.#mods.slice() }));
     }
 }
 
