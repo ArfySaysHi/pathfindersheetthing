@@ -5,6 +5,7 @@ const DEFAULT_STATE = {
     info: {
         name: 'Name',
         alignment: 'True Neutral',
+        art: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Favatar-photo-placeholder-icon-design-vector-id1221380217%3Fk%3D20%26m%3D1221380217%26s%3D612x612%26w%3D0%26h%3DavdFJ5PNo-CSkbUZzQ0Xm8h3u5BovGfSNDrfRicPDfY%3D&f=1&nofb=1&ipt=aa71c93bbec72fce059e3fd7b33bfbf3705f7c3553e87f8e9af3c469fb114d75',
         race: 'Human',
         deity: 'None',
         age: 30,

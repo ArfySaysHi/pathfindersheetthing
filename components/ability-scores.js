@@ -33,6 +33,7 @@ class AbilityScores extends HTMLElement {
     connectedCallback() {
         this.initialRender();
         this.assignNodes();
+        this.updateFromStore(characterStore.getState());
 
         this.onStore = (e) => this.updateFromStore(e.detail);
         characterStore.addEventListener("change", this.onStore);
@@ -59,8 +60,6 @@ class AbilityScores extends HTMLElement {
     }
 
     updateFromStore(state = {}) {
-        if (!state) return;
-
         ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach(key => {
             this._nodes.score[key].textContent = state.derived.abilityScores[key];
             this._nodes.mod[key].textContent = state.derived.abilityMods[key];

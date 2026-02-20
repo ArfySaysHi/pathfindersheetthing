@@ -9,6 +9,17 @@ class CharacterSheet extends HTMLElement {
         super();
         this.#shadow = this.attachShadow({ mode: "open" });
         this.handleSave = this.handleSave.bind(this);
+        this._onClick = this._onClick.bind(this);
+        this._onStore = this._onStore.bind(this);
+    }
+
+    _onStore() {
+        const character = characterStore.getState();
+        const portrait = this.#shadow.getElementById('bento-portrait');
+        if (character && portrait) {
+            const currUrl = portrait.getAttribute('src');
+            if (currUrl !== character.info.art) portrait.setAttribute('src', character.info.art);
+        }
     }
 
     getCharacterById(id) {
@@ -30,12 +41,16 @@ class CharacterSheet extends HTMLElement {
         characterStore.save();
     }
 
+    _onClick(e) {
+        if (e.target?.dataset?.action === 'add-art-url') {
+            const url = prompt("Enter URL for the image:");
+            const character = characterStore.getState();
+            characterStore.set({ info: { ...character.info, art: url } });
+            characterStore.save();
+        }
+    }
+
     connectedCallback() {
-        this.initialRender();
-        this.assignNodes();
-
-        this._nodes.savebtn.addEventListener('mousedown', this.handleSave);
-
         try {
             const char_id = window.location.pathname.split("/").pop();
             const character = this.getCharacterById(char_id);
@@ -43,12 +58,23 @@ class CharacterSheet extends HTMLElement {
         } catch (err) {
             console.error(err);
         }
+
+        this.initialRender();
+        this.assignNodes();
+
+        this._nodes.savebtn.addEventListener('mousedown', this.handleSave);
+        this._nodes.portrait.addEventListener('click', this._onClick);
+        characterStore.addEventListener('change', this._onStore);
     }
 
     disconnectedCallback() {
         if (this._nodes.savebtn) {
             this._nodes.savebtn.removeEventListener('mousedown', this.handleSave);
         }
+        if (this._nodes.portrait) {
+            this._nodes.portrait.removeEventListener('click', this._onClick);
+        }
+        characterStore.removeEventListener('change', this._onStore);
     }
 
     initialRender() {
@@ -71,6 +97,9 @@ class CharacterSheet extends HTMLElement {
                 display: block;
                 width: 100%;
                 object-fit: cover;
+                object-position: top;
+                max-height: 35vh;
+                cursor: pointer;
             }
 
             .bento-section-primary {
@@ -93,7 +122,7 @@ class CharacterSheet extends HTMLElement {
         <div class="character-sheet">
             <div class='bento'>
                 <section class='bento-image'>
-                    <img class='bento-portrait' src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fm%2Fb1FVT2wFB6IAAAAC%2Fhand-on-shoulder.gif&f=1&nofb=1&ipt=c7f2bb2b87598633a4beade8b18d357e5a765adbd153f09624883d18c6c4f97d' />
+                    <img id='bento-portrait' class='bento-portrait' data-action='add-art-url' src='${characterStore.getState().info.art}' />
                     <character-ac></character-ac>
                     <character-saves></character-saves>
                     <character-cm></character-cm>
@@ -121,7 +150,8 @@ class CharacterSheet extends HTMLElement {
     assignNodes() {
         this._nodes = {
             modForm: this.#shadow.getElementById("mod-form"),
-            savebtn: this.#shadow.getElementById("savebtn")
+            savebtn: this.#shadow.getElementById("savebtn"),
+            portrait: this.#shadow.getElementById("bento-portrait"),
         };
     }
 }
