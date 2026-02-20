@@ -94,7 +94,9 @@ class CharacterSheet extends HTMLElement {
             <div class='bento'>
                 <section class='bento-image'>
                     <img class='bento-portrait' src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia1.tenor.com%2Fm%2Fb1FVT2wFB6IAAAAC%2Fhand-on-shoulder.gif&f=1&nofb=1&ipt=c7f2bb2b87598633a4beade8b18d357e5a765adbd153f09624883d18c6c4f97d' />
+                    <character-ac></character-ac>
                     <character-saves></character-saves>
+                    <character-cm></character-cm>
                 </section>
                 <section class='bento-section-secondary'>
                     <ability-scores></ability-scores>

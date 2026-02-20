@@ -40,7 +40,7 @@ class Skills extends HTMLElement {
         this._nodes['skill-rows'].innerHTML = Object.keys(skills).sort().map(k => {
             return `<tr>
                 <td>${k}</td>
-                <td><input type='checkbox' value='${skills[k].classSkill}' disabled='true' /></td>
+                <td><input type='checkbox' ${skills[k].classSkill ? 'checked=""' : ''} disabled='true' /></td>
                 <td>${skills[k].abilityScore}</td>
                 <td>${skills[k].skillMod}</td>
                 <td><input type='number' data-skill='${k}' min='0' value='${skills[k].rank}' /></td>

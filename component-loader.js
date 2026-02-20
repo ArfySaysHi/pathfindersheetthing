@@ -1,6 +1,8 @@
 const components = [
     'ability-scores',
     'app-router',
+    'character-ac',
+    'character-cm',
     'character-list',
     'character-saves',
     'character-sheet',
