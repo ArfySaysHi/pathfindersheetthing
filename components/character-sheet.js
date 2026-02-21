@@ -167,6 +167,12 @@ class CharacterSheet extends HTMLElement {
                         <tab-panel name="items" title="Items">
                             <mod-form id="mod-form"></mod-form>
                         </tab-panel>
+                        <tab-panel name='feats' title='Feats'>
+                            Feats go here...
+                        </tab-panel>
+                        <tab-panel name='classfeatures' title='Class Features'>
+                            Much much later, class feature listing
+                        </tab-panel>
                     </tab-container>
                 </section>
             </div>

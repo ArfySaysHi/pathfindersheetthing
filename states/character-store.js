@@ -28,6 +28,7 @@ const DEFAULT_STATE = {
     classes: [],
     items: [],
     feats: [],
+    mods: [],
     derived: {
         abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
         abilityMods: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
@@ -73,6 +74,12 @@ const DEFAULT_STATE = {
     }
 };
 
+const STACKABLE_TYPES = [
+    'Untyped',
+    'Circumstance',
+    'Dodge'
+]
+
 export class CharacterStore extends EventTarget {
     #state = structuredClone(DEFAULT_STATE);
 
@@ -95,13 +102,31 @@ export class CharacterStore extends EventTarget {
         this.set({ pointBuy: pb });
     }
 
+    evaluateExpression(expression) {
+        if (!isNaN(Number(expression))) return Number(expression);
+
+        console.log("expression", expression);
+    }
+
     computeAbilityScores(pointBuy) {
         const keys = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
         const out = {};
+
         keys.forEach(k => {
-            // TODO: Expand to account for modifiers later
-            const v = Number(pointBuy?.[k] ?? 10);
-            out[k] = v;
+            let total = Number(pointBuy?.[k] ?? 10);
+            const mods = this.#state.mods.filter(m => m.target.toLowerCase() === k);
+            const bonuses = {};
+
+            // Check source not same and check for stackables
+            mods.forEach(m => {
+                const res = this.evaluateExpression(m.value);
+                if (!bonuses[m.type] || bonuses[m.type] < res) bonuses[m.type] = res;
+            });
+
+            Object.keys(bonuses).forEach(key => {
+                total += bonuses[key];
+            });
+            out[k] = total;
         })
         return out;
     }

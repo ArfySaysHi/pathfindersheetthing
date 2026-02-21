@@ -34,6 +34,7 @@ class Skills extends HTMLElement {
         characterStore.save();
     }
 
+    // TODO: Add (B) for background skills
     renderSkills() {
         const { derived: { skills } } = characterStore.getState();
         this._nodes['skill-rows'].innerHTML = Object.keys(skills).sort().map(k => {

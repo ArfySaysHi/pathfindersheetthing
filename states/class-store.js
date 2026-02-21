@@ -1,3 +1,6 @@
+// TODO: Add class skills
+// TODO: Add skill ranks
+// TODO: Add class features at certain levels
 const DEFAULT_STATE = [
     {
         name: 'Fighter',

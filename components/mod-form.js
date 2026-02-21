@@ -1,3 +1,5 @@
+import { characterStore } from "../states/character-store.js";
+
 const MOD_TYPES = [
     'Untyped', 'Alchemical', 'Armor', 'Circumstance', 'Competence', 'Deflection', 'Dodge',
     'Enhancement', 'Inherent', 'Insight', 'Luck', 'Morale', 'Natural Armor', 'Profane',
@@ -29,13 +31,13 @@ class ModForm extends HTMLElement {
     get type() { return this.#type; }
     set type(val) { this.#type = String(val || 'Item'); }
 
-    get mods() { return this.#mods.slice(); }
+    get mods() { return this.#mods; }
     set mods(val) {
         this.#mods = Array.isArray(val) ? val.map(m => ({ type: 'Untyped', target: '', value: '', ...m })) : [];
         if (this.$list) this.renderList();
     }
 
-    addMod(mod = { type: 'Untyped', target: '', value: '' }) {
+    addMod(mod = { type: 'Untyped', target: '', value: '', source: this.#name }) {
         this.#mods = [...this.#mods, { type: 'Untyped', target: '', value: '', ...mod }];
         this.renderList();
     }
@@ -56,8 +58,9 @@ class ModForm extends HTMLElement {
 
     handleSubmit(e) {
         e.preventDefault();
-        const payload = { name: this.#name, type: this.#type, mods: this.#mods.slice() };
-        console.log('ModForm submit', payload);
+        const c = characterStore.getState();
+        const item = { name: this.#name };
+        characterStore.set({ items: [...c.items, item], mods: [...c.mods, ...this.#mods] });
     }
 
     newMod() { this.addMod(); }
