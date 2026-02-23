@@ -12,7 +12,8 @@ const components = [
     'mod-form',
     'skills',
     'tab-container',
-    'tab-panel'
+    'tab-panel',
+    'tabs/item-tab'
 ]
 
 async function loadComponents() {
